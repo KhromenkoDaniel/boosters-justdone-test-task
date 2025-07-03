@@ -44,4 +44,3 @@ next-env.d.ts
 # IDEs and editors
 /.idea
 .vscode
-.DS_Store
