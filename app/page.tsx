@@ -2,13 +2,6 @@ import { ParaphraseScreen } from '@/components/ParaphraseScreen';
 import { Box, Container, Typography } from '@mui/material';
 
 async function getCmsData() {
-  if (process.env.NODE_ENV === 'production') {
-    return {
-      title: 'AI Text Paraphraser by JustDone',
-      subtitle: 'Transform your writing from good to great with our Paraphraser tool.',
-    };
-  }
-
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/cms`, {
     next: { revalidate: 3600 },
   });
