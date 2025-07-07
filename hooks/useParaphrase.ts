@@ -1,9 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import { SAMPLE_TEXT } from '@/utils/constants';
-import { validateText } from '@/utils/validateText';
+import { getValidateText } from '@/utils/getValidateText';
 import { ParaphraseStatus } from '@/types';
 
 export default function useParaphrase() {
@@ -11,41 +11,42 @@ export default function useParaphrase() {
   const [status, setStatus] = useState<ParaphraseStatus>('initial');
   const [error, setError] = useState<string | null>(null);
 
-  const resetState = () => {
+  const handleClear = useCallback(() => {
     setText('');
     setError(null);
     setStatus('initial');
-  };
+  }, []);
 
-  const setReadyOrInitial = (value: string) => {
+  const setReadyOrInitial = useCallback((value: string) => {
     if (value.trim()) {
       setStatus('ready');
     } else {
       setStatus('initial');
       setError(null);
     }
-  };
+  }, []);
 
-  const handleTextChange = (value: string) => {
-    setText(value);
-    setReadyOrInitial(value);
-  };
+  const handleTextChange = useCallback(
+    (value: string) => {
+      setText(value);
+      setReadyOrInitial(value);
+    },
+    [setReadyOrInitial]
+  );
 
-  const handlePaste = async () => {
+  const handlePaste = useCallback(async () => {
     try {
       const clipboardText = await navigator.clipboard.readText();
       handleTextChange(clipboardText);
     } catch {
       setError('Failed to read from clipboard.');
     }
-  };
+  }, [handleTextChange]);
 
-  const handleSample = () => handleTextChange(SAMPLE_TEXT);
+  const handleSample = useCallback(() => handleTextChange(SAMPLE_TEXT), [handleTextChange]);
 
-  const handleClear = () => resetState();
-
-  const handleParaphrase = async () => {
-    const validationError = validateText(text);
+  const handleParaphrase = useCallback(async () => {
+    const validationError = getValidateText(text);
     if (validationError) {
       setError(validationError);
       setStatus('error');
@@ -63,8 +64,7 @@ export default function useParaphrase() {
       });
 
       if (!res.ok) {
-        const msg = `Server error: ${res.status}`;
-        setError(msg);
+        setError(`Server error: ${res.status}`);
         setStatus('error');
         return;
       }
@@ -85,7 +85,7 @@ export default function useParaphrase() {
       setError(msg);
       setStatus('error');
     }
-  };
+  }, [text]);
 
   return {
     text,

@@ -1,3 +1,6 @@
+'use client';
+
+import { memo } from 'react';
 import { Stack } from '@mui/material';
 
 import ClearButton from './ClearButton';
@@ -5,7 +8,7 @@ import ParaphraseButton from './ParaphraseButton';
 
 import { ParaphraseActionsProps } from '@/types';
 
-export default function ParaphraseActions({
+const ParaphraseActions = memo(function ParaphraseActions({
   onClear,
   onParaphrase,
   isParaphraseDisabled,
@@ -35,4 +38,6 @@ export default function ParaphraseActions({
       />
     </Stack>
   );
-}
+});
+
+export default ParaphraseActions;
