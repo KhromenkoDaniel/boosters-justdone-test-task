@@ -8,6 +8,14 @@ async function getCmsData() {
   return res.json();
 }
 
+export async function generateMetadata() {
+  const cmsData = await getCmsData();
+  return {
+    title: cmsData.title,
+    description: cmsData.subtitle,
+  };
+}
+
 export default async function Home() {
   const cmsData = await getCmsData();
 
