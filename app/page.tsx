@@ -1,4 +1,5 @@
 import { ParaphraseScreen } from '@/components/ParaphraseScreen';
+
 import { Box, Container, Typography } from '@mui/material';
 
 async function getCmsData() {
@@ -6,6 +7,14 @@ async function getCmsData() {
     next: { revalidate: 3600 },
   });
   return res.json();
+}
+
+export async function generateMetadata() {
+  const cmsData = await getCmsData();
+  return {
+    title: cmsData.title,
+    description: cmsData.subtitle,
+  };
 }
 
 export default async function Home() {

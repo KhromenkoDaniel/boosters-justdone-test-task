@@ -1,17 +1,20 @@
+'use client';
+
+import { memo } from 'react';
 import { Stack } from '@mui/material';
 
 import ClearButton from './ClearButton';
 import ParaphraseButton from './ParaphraseButton';
-
 import { ParaphraseActionsProps } from '@/types';
 
-export default function ParaphraseActions({
+const ParaphraseActions = memo(function ParaphraseActions({
+  status,
   onClear,
   onParaphrase,
-  isParaphraseDisabled,
-  isLoading,
-  shouldShowClear,
 }: ParaphraseActionsProps) {
+  const isDisabled = status !== 'ready';
+  const showClear = ['ready', 'success', 'error'].includes(status);
+
   return (
     <Stack
       direction="row"
@@ -27,12 +30,14 @@ export default function ParaphraseActions({
         padding: '8px',
       }}
     >
-      {shouldShowClear && <ClearButton onClearAction={onClear} />}
+      {showClear && <ClearButton onClearAction={onClear} />}
       <ParaphraseButton
         onParaphraseAction={onParaphrase}
-        isParaphraseDisabled={isParaphraseDisabled}
-        isLoading={isLoading}
+        isParaphraseDisabled={isDisabled}
+        isLoading={status === 'loading'}
       />
     </Stack>
   );
-}
+});
+
+export default ParaphraseActions;

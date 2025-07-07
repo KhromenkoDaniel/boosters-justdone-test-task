@@ -1,4 +1,4 @@
-export function validateText(text: string): string | null {
+export function getValidateText(text: string): string | null {
   const trimmed = text.trim();
 
   if (!trimmed) {
