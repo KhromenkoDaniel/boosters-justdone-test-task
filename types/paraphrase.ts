@@ -5,19 +5,10 @@ export type ClearButtonProps = {
 };
 
 export type ParaphraseTextareaProps = {
+  status: ParaphraseStatus;
   value: string;
-  onChange: (val: string) => void;
-  isLoading: boolean;
-  onPaste: () => void;
-  onSample: () => void;
-};
-
-export type ParaphraseActionsProps = {
-  onClear: () => void;
-  onParaphrase: () => void;
-  isParaphraseDisabled: boolean;
-  isLoading: boolean;
-  shouldShowClear: boolean;
+  onStatusChangeAction: (text: string) => void;
+  onTextChangeAction: (text: string) => void;
 };
 
 export type ParaphraseButtonProps = {
@@ -25,3 +16,19 @@ export type ParaphraseButtonProps = {
   isParaphraseDisabled: boolean;
   isLoading: boolean;
 };
+
+export type ParaphraseActionsProps = {
+  status: ParaphraseStatus;
+  onClear: () => void;
+  onParaphrase: () => void;
+};
+
+export type State = {
+  status: ParaphraseStatus;
+  error: string | null;
+};
+
+export type Action =
+  | { type: 'SET_STATUS'; payload: ParaphraseStatus }
+  | { type: 'SET_ERROR'; payload: string }
+  | { type: 'CLEAR' };

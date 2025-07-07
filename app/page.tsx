@@ -1,4 +1,5 @@
 import { ParaphraseScreen } from '@/components/ParaphraseScreen';
+
 import { Box, Container, Typography } from '@mui/material';
 
 async function getCmsData() {
