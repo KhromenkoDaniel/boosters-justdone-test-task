@@ -3,44 +3,40 @@
 import { Container, Typography } from '@mui/material';
 import { customTypography } from '@/theme';
 import { useTheme } from '@mui/system';
+import { useState } from 'react';
 
 import { ParaphraseTextarea } from '@/components/ParaphraseTextarea';
 import { ParaphraseActions } from '@/components/ParaphraseActions';
-import useParaphrase from '@/hooks/useParaphrase';
+import useParaphraseReducer from '@/hooks/useParaphraseReducer';
 
 export default function ParaphraseScreen() {
-  const {
-    text,
-    error,
-    isLoading,
-    isParaphraseDisabled,
-    shouldShowClear,
-    handleTextChange,
-    handlePaste,
-    handleSample,
-    handleClear,
-    handleParaphrase,
-  } = useParaphrase();
+  const [text, setText] = useState('');
 
   const theme = useTheme();
+
+  const { status, error, handleClear, handleParaphrase, setReadyOrInitial } =
+    useParaphraseReducer();
+
+  const handleParaphraseAction = () => {
+    void handleParaphrase(text, setText);
+  };
 
   return (
     <Container component="section" maxWidth="lg">
       <ParaphraseTextarea
         value={text}
-        onChange={handleTextChange}
-        isLoading={isLoading}
-        onPaste={handlePaste}
-        onSample={handleSample}
+        status={status}
+        onStatusChangeAction={setReadyOrInitial}
+        onTextChangeAction={setText}
       />
 
-      <ParaphraseActions
-        onClear={handleClear}
-        onParaphrase={handleParaphrase}
-        isParaphraseDisabled={isParaphraseDisabled}
-        isLoading={isLoading}
-        shouldShowClear={shouldShowClear}
-      />
+      {status !== 'success' && (
+        <ParaphraseActions
+          status={status}
+          onClear={handleClear}
+          onParaphrase={handleParaphraseAction}
+        />
+      )}
 
       {error && (
         <Typography
